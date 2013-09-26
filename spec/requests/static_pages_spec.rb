@@ -70,4 +70,27 @@ describe "StaticPages" do
       page.should have_selector('title', :text => "Ruby on Rails Tutorial Sample App | About Us")
     end
   end
+
+  describe "Contacts Page" do
+    describe "GET /static_pages/contacts.html" do
+      it "works! (now write some real specs)" do
+        get static_pages_contacts_path
+        response.status.should be (200)
+      end
+    end
+    describe "Contacts Page Content" do
+      it "should have the content 'Contact Us'" do
+        visit static_pages_contacts_path
+        page.should have_content('Contact Us')
+      end
+      it "should have the h1 'Contact Us'" do
+        visit static_pages_contacts_path
+        page.should have_selector('h1', :text => "Contact Us")
+      end
+      it "should have the title 'Contact Us'" do
+        visit static_pages_contacts_path
+        page.should have_selector('title', :text => "Ruby on Rails Tutorial Sample App | Contact Us")
+      end
+    end
+  end
 end
