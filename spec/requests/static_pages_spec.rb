@@ -2,7 +2,7 @@ require_relative '../spec_helper'
 
 describe "StaticPages" do
 
-  let(:base_title) {"Ruby on Rails Tutorial Sample App"}
+  let(:base_title) {"Ruby on Rails Tutorial App"}
 
   describe "Home Page" do
     describe "GET /static_pages/home.html" do
