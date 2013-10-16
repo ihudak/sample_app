@@ -1,7 +1,10 @@
 @import "bootstrap";
 
-/* universal */
+/************** variables **************/
+$grayMediumLight: #eaeaea;
+/************** variables **************/
 
+/************** universal **************/
 html {
   overflow-y: scroll;
 }
@@ -20,14 +23,13 @@ textarea {
 
 .center {
   text-align: center;
+  h1 {
+    margin-bottom: 10px;
+  }
 }
+/************** universal **************/
 
-.center h1 {
-  margin-bottom: 10px;
-}
-
-/* typography */
-
+/************** typography *************/
 h1, h2, h3, h4, h5, h6 {
   line-height: 1;
 }
@@ -45,48 +47,45 @@ h2 {
   margin-bottom: 30px;
   text-align: cneter;
   font-weight: normal;
-  color: #999;
+  color: $grayLight;
 }
 
 p {
   font-size: 1.1em;
   line-height: 1.7em;
 }
+/************** typography *************/
 
-/* header */
-
+/**************** header ***************/
 #logo {
   float: left;
   margin-right: 10px;
   font-size: 1.7em;
-  color: #fff;
+  color: white;
   text-transform: uppercase;
   letter-spacing: -1px;
   padding-top: 9px;
   font-weight: bold;
   line-height: 1;
+  &:hover {
+    color: white;
+    text-decoration: none;
+  }
 }
+/**************** header ***************/
 
-#logo:hover {
-  color: #fff;
-  text-decoration: none;
-}
-
-/* footer */
-
+/**************** footer ***************/
 footer {
   margin-top: 45px;
   padding-top: 5px;
-  border-top: 1px solid #eaeaea;
-  color: #999;
-}
-
-footer a {
-  color: #555;
-}
-
-footer a:hover {
-  color: #222;
+  border-top: 1px solid $grayMediumLight;
+  color: $grayLight;
+  a {
+    color: $gray;
+    &:hover {
+      color: $grayDarker;
+    }
+  }
 }
 
 footer small {
@@ -96,9 +95,9 @@ footer small {
 footer ul {
   float: right;
   list-style: none;
+  li {
+    float: left;
+    margin-left: 10px;
+  }
 }
-
-footer ul li {
-  float: left;
-  margin-left: 10px;
-}
+/**************** footer ***************/
