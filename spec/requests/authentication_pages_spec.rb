@@ -37,6 +37,14 @@ describe "Authentication" do
       it { should have_link('Sign out',    href: signout_path) }
       it { should_not have_link('Sign in', href: signin_path) }
 
+      describe "registering when already signed in" do
+        before do
+          visit root_path
+          click_link "Sign up now!"
+        end
+        it { should have_link('Sign up now!', href: signup_path) }
+      end
+
       describe "followed by signout" do
         before { click_link "Sign out" }
         it { should have_link('Sign in') }
@@ -47,6 +55,13 @@ describe "Authentication" do
   describe "authorization" do
     describe "for non-signed-in users" do
       let(:user) { FactoryGirl.create(:user) }
+
+      describe "hide the specific pages" do
+        before { visit root_path }
+        it { should_not have_link('Profile') }
+        it { should_not have_link('Settings') }
+        it { should have_link('Sign in', href: signin_path) }
+      end
 
       describe "in the Users controller" do
 
@@ -78,6 +93,20 @@ describe "Authentication" do
           it "should rended the desired protected page" do
             page.should have_selector('title', text: "Edit user")
           end
+
+          describe "when signing in again" do
+            before do
+              delete signout_path
+              visit signin_path
+              fill_in "Email",    with: user.email
+              fill_in "Password", with: user.password
+              click_button "Sign in"
+            end
+
+            it "should rended the default (profile) page" do
+              page.should have_selector('title', text: user.name)
+            end
+          end
         end
       end
     end
@@ -98,6 +127,21 @@ describe "Authentication" do
       end
     end
 
+    describe "as ssigned in user" do
+      let(:user) { FactoryGirl.create(:user) }
+      before { valid_signin(user) }
+
+      describe "new action should redirect to root" do
+        before { get new_user_path }
+        specify { response.should redirect_to(root_path) }
+      end
+
+      describe "create action should redirect to root" do
+        before { post users_path }
+        specify { response.should redirect_to(root_path) }
+      end
+    end
+
     describe "as non-admin user" do
       let(:user) { FactoryGirl.create(:user) }
       let(:non_admin) { FactoryGirl.create(:user) }
@@ -107,6 +151,16 @@ describe "Authentication" do
       describe "submitting a DELETE request to the Users#destroy action" do
         before { delete user_path(user) }
         specify { response.should redirect_to(root_path) }
+      end
+    end
+
+    describe "as admin user" do
+      let(:admin) { FactoryGirl.create(:admin) }
+      before { valid_signin(admin) }
+
+      describe "cannot delete own account by submitting DELETE request to Users#destroy" do
+        before { delete user_path(admin) }
+        specify { response.should redirect_to(users_path), flash[:error].should =~ /Cannot delete own account!/i }
       end
     end
   end
