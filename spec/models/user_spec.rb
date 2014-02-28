@@ -13,7 +13,7 @@ require 'spec_helper'
 
 describe User do
   before { @user = User.new(name: "Test User 1", email: "test.user1@test.com",
-                            password: "foobar", password_confirmation: "foobar")}
+                            password: "foobar", password_confirmation: "foobar") }
 
   subject { @user }
 
@@ -28,6 +28,7 @@ describe User do
     it { should respond_to(:remember_token) }
     it { should respond_to(:admin) }
     it { should respond_to(:authenticate) }
+    it { should respond_to(:microposts) }
   end
 
   it { should be_valid }
@@ -163,6 +164,25 @@ describe User do
       expect do
         User.new(admin: false)
       end.to raise_error(ActiveModel::MassAssignmentSecurity::Error)
+    end
+  end
+
+  describe "microposts associations" do
+    before { @user.save }
+    let!(:older_micropost) { FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago) }
+    let!(:newer_micropost) { FactoryGirl.create(:micropost, user: @user, created_at: 1.hour.ago) }
+
+    it 'should have the right microposts in the right order' do
+      @user.microposts.should == [newer_micropost, older_micropost]
+    end
+
+    it 'should destroy associated microposts' do
+      microposts = @user.microposts.dup
+      @user.destroy
+      microposts.should_not be_empty
+      microposts.each do |micropost|
+        Micropost.find_by_id(micropost.id).should be_nil
+      end
     end
   end
 end
