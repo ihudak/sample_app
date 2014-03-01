@@ -208,6 +208,23 @@ aside {
 }
 /************* microposts **************/
 
+/********* micropost countdown *********/
+.remaining, .countdown {
+  display: inline;
+  color: $grayLight;
+  float: right;
+}
+.overlimit {
+  color: $red;
+}
+.almostlimit {
+  color: hsl(360, 57%, 21%);
+}
+.nearlimit {
+  color: $gray;
+}
+/********* micropost countdown *********/
+
 /************ miscellaneous ************/
 .debug_dump {
   clear: both;
