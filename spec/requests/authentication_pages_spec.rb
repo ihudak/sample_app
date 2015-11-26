@@ -40,9 +40,8 @@ describe "Authentication" do
       describe "registering when already signed in" do
         before do
           visit root_path
-          click_link "Sign up now!"
         end
-        it { should have_link('Sign up now!', href: signup_path) }
+        it { should_not have_link('Sign up now!', href: signup_path) }
       end
 
       describe "followed by signout" do
@@ -78,6 +77,18 @@ describe "Authentication" do
         describe "visiting the user index" do
           before { visit users_path }
           it { should have_selector('title', text: 'Sign in') }
+        end
+      end
+
+      describe "in the Microposts controller" do
+        describe "submitting to the create action" do
+          before { post microposts_path }
+          specify { response.should redirect_to(signin_path) }
+        end
+
+        describe "submitting to the destroy action" do
+          before { delete micropost_path(FactoryGirl.create(:micropost)) }
+          specify { response.should redirect_to(signin_path) }
         end
       end
 
